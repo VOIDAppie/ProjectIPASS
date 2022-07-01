@@ -4,6 +4,7 @@ if (document.readyState == 'loading') {
 } else {
     ready()
 }
+
 // met deze ready functie zorg ik er dus voor dat de buttons altijd zullen werken ondanks dat de pagina nog niet is geladen
 function ready() {
     var removeItemFromCart = document.getElementsByClassName('btn-danger')
@@ -16,25 +17,62 @@ function ready() {
         // een event creeeren wanneer er op de knop wordt gedrukt dan wordt de hele row van de cart verwijderd
         // door de parent div van de cart te lezen en verwijderen.
         button.addEventListener('click', removeCartItem)
-            console.log('clicked')
-        }
+        console.log('clicked')
+    }
     var quantityInputs = document.getElementsByClassName('cart-quantity-input')
     for (var i = 0; i < quantityInputs.length; i++) {
         var input = quantityInputs[i]
         input.addEventListener('change', quantityChanged)
     }
+    var addToCartButtons = document.getElementsByClassName('shop-item-button')
+    for (var i = 0; i < addToCartButtons.length; i++) {
+        var button = addToCartButtons[i]
+        button.addEventListener('click', addToCartItem)
+    }
 }
+
 //verwijderen van een item en totale items updaten
-function removeCartItem (event) {
+function removeCartItem(event) {
     var buttonClicked = event.target
     buttonClicked.parentElement.parentElement.remove()
 
     updateCartTotal()
 }
 
-function quantityChanged(event){
+function addToCartItem(event) {
+    var button = even.target()
+    var shopItem = button.parentElement.parentElement
+    var title = shopItem.getElementsByClassName('shop-item-title')[0].innerText
+    var price = shopItem.getElementsByClassName('shop-item-price')[0].innerText
+    var imageSrc = shopItem.getElementsByClassName('shop-item-image')[0].src
+    //checken voor de add to cart button of hij de naam/prijs/img van de item print
+    console.log(title, price, imageSrc)
+
+    addItemToCartRow(title, price, imageSrc)
+}
+
+function addItemToCartRow(title, price, imageSrc) {
+    var cartRow = document.createElement('div') // maakt een div aan voor de html incase een item wordt toegevoegd
+    cartRow.classList.add('cart-row')
+    var cartItems = document.getElementsByClassName('cart-items')[0]
+    var cartRowContent = `
+    <div class="cart-item cart-column">
+                <img class="cart-item-image" src="${imageSrc}" width="100" height="100">
+                <span class="cart-item-title">${title}</span>
+            </div>
+            <span class="cart-price cart-column">${price}</span>
+            <div class="cart-quantity cart-column">
+                <input class="cart-quantity-input" type="number" value="1">
+                <button class="btn btn-danger" type="button">REMOVE</button>
+            </div>`
+    cartRow.innerHTML = cartRowContent
+
+    cartItems.append(cartRow)
+}
+
+function quantityChanged(event) {
     var input = event.target
-    if(isNaN(input.value) || input.value <= 0) {  //checken of input een nummer is en of het geen negatief getal is
+    if (isNaN(input.value) || input.value <= 0) {  //checken of input een nummer is en of het geen negatief getal is
         input.value = 1
     }
     updateCartTotal()
@@ -63,7 +101,7 @@ function updateCartTotal() {
 
     }
     // hier zorgen we ervoor dat er nu visueel te zien is dat de totale prijs te zien is op de pagina
-    total = Math.round(total *100) / 100 // ervoor zorgen dat de totale prijs op 2 decimalen wordt afgerond (source: Web Dev Simplified)
+    total = Math.round(total * 100) / 100 // ervoor zorgen dat de totale prijs op 2 decimalen wordt afgerond (source: Web Dev Simplified)
     document.getElementsByClassName('cart-total-price')[0].innerText = '€' + total
 
 
