@@ -47,14 +47,22 @@ function addToCartItem(event) {
     var imageSrc = shopItem.getElementsByClassName('shop-item-image')[0].src
     //checken voor de add to cart button of hij de naam/prijs/img van de item print
     console.log(title, price, imageSrc)
-
     addItemToCartRow(title, price, imageSrc)
+    updateCartTotal()
 }
 
 function addItemToCartRow(title, price, imageSrc) {
     var cartRow = document.createElement('div') // maakt een div aan voor de html incase een item wordt toegevoegd
     cartRow.classList.add('cart-row')
     var cartItems = document.getElementsByClassName('cart-items')[0]
+    var cartItemName = cartItems.getElementsByClassName('cart-item-title')
+    for (var i = o; i < cartItemName.length; i++){
+        if(cartItemName[i].innerText == title) {
+            alert('this item is already added')
+            return
+        }
+    }
+    // ervoor zorgen dat wanneer een item wordt toegevoegd aan de cart dat de styling title en prijs er correct bij staan (hierbij heb ik hulp gezocht bij Web Dev Simplifified)
     var cartRowContent = `
     <div class="cart-item cart-column">
                 <img class="cart-item-image" src="${imageSrc}" width="100" height="100">
