@@ -15,19 +15,34 @@ function ready() {
         var button = removeItemFromCart[i]
         // een event creeeren wanneer er op de knop wordt gedrukt dan wordt de hele row van de cart verwijderd
         // door de parent div van de cart te lezen en verwijderen.
-        button.addEventListener('click', function (event) {
+        button.addEventListener('click', removeCartItem)
             console.log('clicked')
-            var buttonClicked = event.target
-            buttonClicked.parentElement.parentElement.remove()
-
-            updatePriceTotal()
-        })
+        }
+    var quantityInputs = document.getElementsByClassName('cart-quantity-input')
+    for (var i = 0; i < quantityInputs.length; i++) {
+        var input = quantityInputs[i]
+        input.addEventListener('change', quantityChanged)
     }
+}
+//verwijderen van een item en totale items updaten
+function removeCartItem (event) {
+    var buttonClicked = event.target
+    buttonClicked.parentElement.parentElement.remove()
+
+    updateCartTotal()
+}
+
+function quantityChanged(event){
+    var input = event.target
+    if(isNaN(input.value) || input.value <= 0) {  //checken of input een nummer is en of het geen negatief getal is
+        input.value = 1
+    }
+    updateCartTotal()
 }
 
 
 // methode om de totale prijs te updaten
-function updatePriceTotal() {
+function updateCartTotal() {
     var cartItemContainer = document.getElementsByClassName('cart-items')[0]  //pakt de eerste item
     var cartRows = cartItemContainer.getElementsByClassName('cart-row')  //pakt alle rijen
     var total = 0 //hebben we later nodig (dit gaat door de loop heen)
@@ -48,6 +63,7 @@ function updatePriceTotal() {
 
     }
     // hier zorgen we ervoor dat er nu visueel te zien is dat de totale prijs te zien is op de pagina
+    total = Math.round(total *100) / 100 // ervoor zorgen dat de totale prijs op 2 decimalen wordt afgerond (source: Web Dev Simplified)
     document.getElementsByClassName('cart-total-price')[0].innerText = '€' + total
 
 
