@@ -56,7 +56,7 @@ function addItemToCartRow(title, price, imageSrc) {
     cartRow.classList.add('cart-row')
     var cartItems = document.getElementsByClassName('cart-items')[0]
     var cartItemName = cartItems.getElementsByClassName('cart-item-title')
-    for (var i = o; i < cartItemName.length; i++){
+    for (var i = o; i < cartItemName.length; i++){ //door de rows heen kijken of een een item al in de cart zit
         if(cartItemName[i].innerText == title) {
             alert('this item is already added')
             return
@@ -73,9 +73,10 @@ function addItemToCartRow(title, price, imageSrc) {
                 <input class="cart-quantity-input" type="number" value="1">
                 <button class="btn btn-danger" type="button">REMOVE</button>
             </div>`
-    cartRow.innerHTML = cartRowContent
 
+    cartRow.innerHTML = cartRowContent
     cartItems.append(cartRow)
+    cartRow.getElementsByClassName('btn-danger')[0].addEventListener('click',removeCartItem) // nu kunnen ook nieuwe items verwijderd worden
 }
 
 function quantityChanged(event) {
