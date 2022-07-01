@@ -77,6 +77,8 @@ function addItemToCartRow(title, price, imageSrc) {
     cartRow.innerHTML = cartRowContent
     cartItems.append(cartRow)
     cartRow.getElementsByClassName('btn-danger')[0].addEventListener('click',removeCartItem) // nu kunnen ook nieuwe items verwijderd worden
+    cartRow.getElementsByClassName('cart-quantity-input')[0].addEventListener('change', quantityChanged) // nu kunnen nieuwe items worden aangepast zodat de quantity wordt berekend
+
 }
 
 function quantityChanged(event) {
