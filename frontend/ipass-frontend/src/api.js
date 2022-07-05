@@ -1,7 +1,7 @@
 import {applyAuthTokenInterceptor, setAuthTokens, clearAuthTokens} from 'axios-jwt';
 import axios from 'axios';
 
-const BASE_URL = 'https://ipass-project-1.herokuapp.com'
+const BASE_URL = 'https://ipass-1.herokuapp.com'
 
 // 1. Create an axios instance that you wish to apply the interceptor to
 export const axiosInstance = axios.create({ baseURL: BASE_URL })

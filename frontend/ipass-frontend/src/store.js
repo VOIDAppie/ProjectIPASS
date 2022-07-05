@@ -4,7 +4,7 @@ import {axiosInstance} from "@/api";
 
 Vue.use(Vuex)
 
-const BASE_URL = 'https://ipass-project-1.herokuapp.com'
+const BASE_URL = 'https://ipass-1.herokuapp.com'
 
 export default new Vuex.Store({
     state: {
