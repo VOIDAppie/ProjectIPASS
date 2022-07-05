@@ -1,0 +1,18 @@
+server:
+  port: ${PORT:8080}
+  ssl:
+    enabled: false
+
+spring:
+  main:
+    allow-circular-references: true
+  cloud:
+    azure:
+      storage:
+        blob:
+          endpoint: https://bep2022.blob.core.windows.net
+          container: data
+          sas-token: sp=racwdl&st=2022-07-02T20:47:04Z&se=2023-08-01T04:47:04Z&sv=2021-06-08&sr=c&sig=IVgevXWAQAn2KY%2FSrWqfCZtTCL5YqmuwW3qrgnXFjio%3D
+
+jwt:
+  secret: secret_word

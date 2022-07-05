@@ -1,0 +1,99 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.1'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id "application"
+}
+
+apply plugin : "java"
+ext {
+	javaMainClass = "com.ilcik.ipass.IpassApplication"
+}
+
+application {
+	mainClassName = javaMainClass
+}
+
+group = 'com.ilcik'
+sourceCompatibility = '17'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('springCloudAzureVersion', "4.2.0")
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'javax.xml.bind:jaxb-api'
+	implementation 'com.azure:azure-storage-blob'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "com.azure.spring:spring-cloud-azure-dependencies:${springCloudAzureVersion}"
+	}
+}
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'com.ilcik.ipass.IpassApplication'
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+String webappDir = "$projectDir/frontend/ipass-frontend"
+
+tasks.register("copyFrontend", Copy) {
+	dependsOn("buildVue")
+	group = BasePlugin.BUILD_GROUP
+
+	from(file("$webappDir/dist")) {
+		include("**/*")
+	}
+	into("$projectDir/src/main/resources/static")
+}
+
+tasks.register("buildVue", Exec) {
+	dependsOn("installVue")
+	workingDir(webappDir)
+	inputs.dir(webappDir)
+
+	group = BasePlugin.BUILD_GROUP
+
+	commandLine("npm", "run", "build")
+}
+
+tasks.register("installVue", Exec) {
+	dependsOn("deleteFrontend")
+	workingDir(webappDir)
+	inputs.dir(webappDir)
+
+	group = BasePlugin.BUILD_GROUP
+
+	commandLine("npm", "install")
+}
+
+tasks.register("deleteFrontend", Delete) {
+	group = BasePlugin.BUILD_GROUP
+
+	delete("$webappDir/dist")
+	delete("$projectDir/src/main/resources/static")
+}
